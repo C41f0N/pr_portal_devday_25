@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pr_portal_devday_25/pages/home.dart';
 import 'package:pr_portal_devday_25/pages/login.dart';
 
 void main() {
@@ -13,8 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Participant Relations Portal',
-      theme: ThemeData(colorScheme: ColorScheme.dark(primary: Colors.red)),
-      home: const LoginPage(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.dark(primary: Colors.red[900]!),
+      ),
+      home: const Home(),
     );
   }
 }

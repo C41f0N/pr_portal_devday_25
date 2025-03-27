@@ -6,6 +6,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:pr_portal_devday_25/widgets/mode_switcher.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,8 +16,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool state = true;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Home")));
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ModeSwitcher(
+              width: MediaQuery.of(context).size.width * 0.7,
+              thumbColor: Theme.of(context).colorScheme.primary,
+              mode: state,
+              onChanged: (x) {
+                setState(() {
+                  state = x;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
