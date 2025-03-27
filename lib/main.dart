@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Participant Relations Portal',
       theme: ThemeData(
-        colorScheme: ColorScheme.dark(primary: Colors.red[900]!),
+        colorScheme: ColorScheme.dark(
+          primary: const Color.fromARGB(255, 175, 40, 43),
+        ),
       ),
       home: const Home(),
     );
