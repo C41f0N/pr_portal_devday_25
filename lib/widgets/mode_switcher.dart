@@ -1,3 +1,10 @@
+/*
+  Mode Switcher
+  ---
+
+  A switch to toggle between the Attendance and Competitions mode.
+*/
+
 import 'dart:math';
 import 'package:vector_math/vector_math_64.dart' as math;
 import 'package:flutter/material.dart';
