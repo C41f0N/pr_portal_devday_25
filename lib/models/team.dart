@@ -7,4 +7,5 @@ class Team {
   bool present;
 
   Team({required this.name, required this.teamLeader, required this.present});
+
 }
