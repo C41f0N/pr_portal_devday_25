@@ -1,8 +1,9 @@
 /*
   HOME PAGE
   ---
-
   Shows tables for attendance and competition timings.
+  Allows switching between team attendance and competition views.
+  Includes search functionality for both views.
 */
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:pr_portal_devday_25/widgets/team_tile.dart';
 
 import '../data/data.dart';
 
+enum ViewMode { teams, competitions }
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -26,28 +29,95 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Team> teamList = [];
   List<Competition> compList = [];
+  List<Team> filteredTeamList = [];
+  List<Competition> filteredCompList = [];
+  final TextEditingController controller = TextEditingController();
+  ViewMode viewMode = ViewMode.teams;
+  bool isLoading = true;
+  String? error;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Data data = Data();
-    teamList = data.getTeamList();
-    compList = data.getSampleCompetitions();
+    _loadData();
   }
 
-  TextEditingController controller = TextEditingController();
-  bool state = true;
+  Future<void> _loadData() async {
+    try {
+      setState(() {
+        isLoading = true;
+        error = null;
+      });
+      
+      final data = Data();
+      final teams = data.getTeamList();
+      final competitions = data.getSampleCompetitions();
+      
+      setState(() {
+        print('-------------------------------------Setstate called-------------------------------------');
+        teamList = teams;
+        compList = competitions;
+        filteredTeamList = teams;
+        filteredCompList = competitions;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = 'Failed to load data: $e';
+        isLoading = false;
+      });
+    }
+  }
 
-  Widget Teams() {
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void filterLists(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredTeamList = teamList;
+        filteredCompList = compList;
+      });
+      return;
+    }
+
+    final lowercaseQuery = query.toLowerCase();
+    setState(() {
+      filteredTeamList = teamList.where((team) {
+        return team.name.toLowerCase().contains(lowercaseQuery) ||
+               team.teamLeader.toLowerCase().contains(lowercaseQuery);
+      }).toList();
+
+      filteredCompList = compList.where((competition) {
+        return competition.name.toLowerCase().contains(lowercaseQuery);
+      }).toList();
+    });
+  }
+
+  Widget _buildTeamsList() {
+    if (filteredTeamList.isEmpty) {
+      return Center(
+        child: Text(
+          'No teams found',
+          style: TextStyle(
+            color: CustomColors().searchBarText,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+
     return ListView.separated(
       padding: EdgeInsets.only(bottom: 20),
-      itemCount: teamList.length,
+      itemCount: filteredTeamList.length,
       itemBuilder: (context, index) {
         return TeamTile(
-          team: teamList[index],
+          team: filteredTeamList[index],
           onTap: () {
-            //?
+            // TODO: Implement team selection logic
           },
         );
       },
@@ -57,17 +127,61 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget Competitions() {
+  Widget _buildCompetitionsList() {
+    if (filteredCompList.isEmpty) {
+      return Center(
+        child: Text(
+          'No competitions found',
+          style: TextStyle(
+            color: CustomColors().searchBarText,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+
     return ListView.separated(
       padding: EdgeInsets.only(bottom: 20),
-      itemCount: compList.length,
+      itemCount: filteredCompList.length,
       itemBuilder: (context, index) {
-        return CompetitionTile(competition: compList[index]);
+        return CompetitionTile(competition: filteredCompList[index]);
       },
       separatorBuilder: (BuildContext context, int index) {
         return SizedBox(height: MediaQuery.of(context).size.height * 0.018);
       },
     );
+  }
+
+  Widget _buildContent() {
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (error != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              error!,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadData,
+              child: Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return viewMode == ViewMode.teams ? _buildTeamsList() : _buildCompetitionsList();
   }
 
   @override
@@ -83,73 +197,30 @@ class _HomeState extends State<Home> {
             flex: 1,
             child: ModeSwitcher(
               width: MediaQuery.of(context).size.width * 0.7,
-              // thumbColor: Theme.of(context).colorScheme.primary,
               thumbColor:
-                  state
+                  viewMode == ViewMode.teams
                       ? Theme.of(context).colorScheme.primary
                       : Colors.green.withValues(alpha: 0.5),
-              mode: state,
+              mode: viewMode == ViewMode.teams,
               onChanged: (x) {
                 setState(() {
-                  state = x;
-                  print(state);
+                  viewMode = x ? ViewMode.teams : ViewMode.competitions;
                 });
               },
             ),
           ),
           SizedBox(height: 10),
-          CustomSearchBar(controller: controller),
+          CustomSearchBar(
+            controller: controller,
+            onChanged: filterLists,
+          ),
           SizedBox(height: 20),
           Expanded(
             flex: 8,
-            child: Container(child: state ? Teams() : Competitions()),
+            child: Container(child: _buildContent()),
           ),
         ],
       ),
     );
-    // return Scaffold(
-    //   body: Center(
-    //     child: SizedBox(
-    //       height: MediaQuery.of(context).size.height * 0.5,
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         children: [
-    //           SizedBox(
-    //             width: MediaQuery.of(context).size.width * 0.8,
-    //             child: CompetitionTile(
-    //               backgroundColor: Theme.of(context).colorScheme.primary,
-    //               competition: Competition(
-    //                 name: "Tech Heist",
-    //                 startTime: DateTime.now().subtract(Duration(hours: 1)),
-    //                 endTime: DateTime.now().subtract(Duration(hours: 2)),
-    //               ),
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             width: MediaQuery.of(context).size.width * 0.8,
-    //             child: TeamTile(
-    //               backgroundColor: Theme.of(context).colorScheme.primary,
-    //               team: Team(
-    //                 name: "Proxima",
-    //                 teamLeader: "Abdul Ahad",
-    //                 present: false,
-    //               ),
-    //             ),
-    //           ),
-    //           ModeSwitcher(
-    //             width: MediaQuery.of(context).size.width * 0.7,
-    //             thumbColor: Theme.of(context).colorScheme.primary,
-    //             mode: state,
-    //             onChanged: (x) {
-    //               setState(() {
-    //                 state = x;
-    //               });
-    //             },
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

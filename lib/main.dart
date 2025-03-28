@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:pr_portal_devday_25/pages/home.dart';
-import 'package:pr_portal_devday_25/pages/login.dart';
+import 'package:pr_portal_devday_25/pages/splash.dart';
+import 'package:flutter/services.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, 
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -13,13 +19,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Participant Relations Portal',
       theme: ThemeData(
         colorScheme: ColorScheme.dark(
           primary: const Color.fromARGB(255, 175, 40, 43),
         ),
       ),
-      home: const Home(),
+      home: const Splash(),
     );
   }
 }
