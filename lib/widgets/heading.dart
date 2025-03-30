@@ -16,7 +16,7 @@ class HeadingWidget extends StatelessWidget {
   }
 
   final TextStyle textStyle = TextStyle(
-    fontSize: 60, // Increased font size
+    fontSize: 35, // Increased font size
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic,
     color: Colors.red,
