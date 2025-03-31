@@ -5,6 +5,7 @@ import 'package:pr_portal_devday_25/constants/config.dart';
 
 // Takes username and password and returns a jwt token
 Future<String> authenticate(String username, String password) async {
+  try {
   var response = await http.post(
     Uri.parse("$serverUrl/api/auth/login"),
     headers: {'Content-Type': 'application/json'},
@@ -22,9 +23,14 @@ Future<String> authenticate(String username, String password) async {
               .toList()[0]
               .split("=")[1];
 
-      return "SUCCESS_$token";
+      return "$token";
     }
+  } else if (response.statusCode == 401) {
+    return "UNAUTHORIZED";
   }
 
-  return "FAILED_${response.statusCode}";
+  return "FAILED";} catch (e) {
+    print(e);
+    return "FAILED";
+  }
 }

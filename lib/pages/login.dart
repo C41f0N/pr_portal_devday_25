@@ -63,8 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                       controller: usernameController,
                       autocorrect: false,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Username',
+                        errorText: passwordError,
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
@@ -100,8 +101,9 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       autocorrect: false,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Password',
+                        errorText: passwordError,
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
@@ -126,16 +128,61 @@ class _LoginPageState extends State<LoginPage> {
                     height: 55,
                     child: TextButton(
                       onPressed: () async {
-                        if (usernameController.text.isEmpty ||
-                            passwordController.text.isEmpty) {
-                          await showErrorDialog(context: context);
-                          return;
+                        // Giving error messages
+                        usernameError =
+                            usernameController.text.isEmpty
+                                ? "Enter a username"
+                                : null;
+                        passwordError =
+                            passwordController.text.isEmpty
+                                ? "Enter a password"
+                                : null;
+                        setState(() {});
+
+                        // Login logic
+                        if (usernameError == null && passwordError == null) {
+                          String result = await authenticate(
+                            usernameController.text,
+                            passwordController.text,
+                          );
+
+                          if (result == "UNAUTHORIZED") {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: Text(
+                                      "Username or password incorrect.",
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed:
+                                            () => Navigator.of(context).pop(),
+                                        child: Text("Okay"),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          } else if (result == "FAILED") {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: Text("An unknown error occoured"),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed:
+                                            () => Navigator.of(context).pop(),
+                                        child: Text("Okay"),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          } else {
+                            prPortal.setToken(result);
+                            prPortal.setLoggedIn(true);
+                          }
                         }
-                        //Login logic
-                        authenticate(
-                          usernameController.text,
-                          passwordController.text,
-                        );
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.red,
@@ -153,24 +200,4 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-}
-
-Future<void> showErrorDialog({required BuildContext context}) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text("Error"),
-        content: Text("Please Enter Username and Password"),
-        actions: [
-          TextButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }
