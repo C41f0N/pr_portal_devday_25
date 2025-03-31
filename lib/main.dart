@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pr_portal_devday_25/pages/splash.dart';
 import 'package:flutter/services.dart';
 
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox("LOCAL_STORAGE");
 
-void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp, 
-  ]).then((_) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
+    _,
+  ) {
     runApp(MyApp());
   });
 }
