@@ -7,7 +7,7 @@ class CustomSearchBar extends StatefulWidget {
   final Function(String) onChanged;
 
   const CustomSearchBar({
-    super.key, 
+    super.key,
     required this.controller,
     required this.onChanged,
   });
@@ -46,42 +46,23 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-      child: Container(
-        padding: EdgeInsets.only(top: 8,bottom: 6, left: 28, right: 4),
-        width: double.infinity,
-        height: height * 0.08,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          color: CustomColors().searchBarGrey,
+    return TextField(
+      controller: widget.controller,
+      style: TextStyle(color: CustomColors().searchBarText),
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          gapPadding: 900,
         ),
-        child: TextField(
-          controller: widget.controller,
-          style: TextStyle(
-            color: CustomColors().searchBarText,
-            fontSize: 24,
-          ),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Search',
-            hintStyle: TextStyle(
-              color: CustomColors().searchBarText,
-              fontSize: 24,
-            ),
-            suffixIcon: widget.controller.text.isNotEmpty
-                ? Padding(
-              padding: EdgeInsets.only(top: 2, right: 8),
-              child: IconButton(
-                icon: Icon(Icons.cancel_rounded, size: 24, color: CustomColors().searchBarText),
-                onPressed: () {
-                  widget.controller.clear();
-                },
-              ),
-            )
-                : null,
-          ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          gapPadding: 900,
         ),
+        hintText: 'Search',
+        filled: true,
+        fillColor: CustomColors().searchBarGrey,
+        hintStyle: TextStyle(color: CustomColors().searchBarText),
+        suffixIcon: Icon(Icons.search, color: CustomColors().searchBarText),
       ),
     );
   }

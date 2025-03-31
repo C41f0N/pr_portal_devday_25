@@ -123,7 +123,7 @@ class _HomeState extends State<Home> {
         );
       },
       separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: MediaQuery.of(context).size.height * 0.018);
+        return SizedBox(height: 16);
       },
     );
   }
@@ -145,7 +145,7 @@ class _HomeState extends State<Home> {
         return CompetitionTile(competition: filteredCompList[index]);
       },
       separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: MediaQuery.of(context).size.height * 0.018);
+        return SizedBox(height: 16);
       },
     );
   }
@@ -176,20 +176,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors().bg,
-        body: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: ModeSwitcher(
-                width: MediaQuery.of(context).size.width * 0.7,
-                thumbColor:
-                    viewMode == ViewMode.teams
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.green.withValues(alpha: 0.5),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ModeSwitcher(
+                width: MediaQuery.of(context).size.width - width * 0.1,
+                thumbColor: Theme.of(context).colorScheme.primary,
                 mode: viewMode == ViewMode.teams,
                 onChanged: (x) {
                   setState(() {
@@ -197,12 +196,15 @@ class _HomeState extends State<Home> {
                   });
                 },
               ),
-            ),
-            SizedBox(height: 10),
-            CustomSearchBar(controller: controller, onChanged: filterLists),
-            SizedBox(height: 20),
-            Expanded(flex: 8, child: Container(child: _buildContent())),
-          ],
+
+              CustomSearchBar(controller: controller, onChanged: filterLists),
+
+              SizedBox(
+                height: height * 0.75,
+                child: Container(child: _buildContent()),
+              ),
+            ],
+          ),
         ),
       ),
     );

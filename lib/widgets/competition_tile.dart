@@ -5,8 +5,10 @@
   Holds information about a competition and can modify it's timings
 */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/competition.dart';
 
 class CompetitionTile extends StatelessWidget {
@@ -27,70 +29,69 @@ class CompetitionTile extends StatelessWidget {
         DateTime.now().isBefore(competition.endTime);
     bool hasEnded = DateTime.now().isAfter(competition.endTime);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          color: isGoingOn? Colors.green.withValues(alpha: 1) : Colors.green.withValues(alpha: 0.3)
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: constraints.maxWidth * 0.7,
-                    child: Text(competition.name, style: TextStyle(fontSize: 25)),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        color: isGoingOn ? CustomColors().lightRed : CustomColors().darkRed,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: constraints.maxWidth * 0.6,
+                  child: AutoSizeText(
+                    competition.name,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 25),
                   ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    width: constraints.maxWidth * 0.3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(height: 3),
-                        Text(
-                          DateFormat("hh:mm a").format(competition.startTime),
-                          style:
-                              notStarted
-                                  ? TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 18,
-                                  )
-                                  : TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.6),
-                                    fontSize: 18,
-                                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  width: constraints.maxWidth * 0.3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(height: 3),
+                      Opacity(
+                        opacity: notStarted ? 0.9 : 0.6,
+                        child: Transform.scale(
+                          alignment: Alignment.centerRight,
+                          scale: notStarted ? 1 : 0.9,
+                          child: AutoSizeText(
+                            DateFormat("hh:mm a").format(competition.startTime),
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
                         ),
-                        SizedBox(height: 5),
-                        Text(
-                          DateFormat("hh:mm a").format(competition.endTime),
-                          style:
-                              isGoingOn
-                                  ? TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 18,
-                                  )
-                                  : TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.6),
-                                    fontSize: 18,
-                                  ),
+                      ),
+                      SizedBox(height: 5),
+                      Opacity(
+                        opacity: isGoingOn ? 0.9 : 0.6,
+                        child: Transform.scale(
+                          scale: isGoingOn ? 1 : 0.9,
+                          alignment: Alignment.centerRight,
+                          child: AutoSizeText(
+                            DateFormat("hh:mm a").format(competition.endTime),
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
