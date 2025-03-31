@@ -48,13 +48,15 @@ class _HomeState extends State<Home> {
         isLoading = true;
         error = null;
       });
-      
+
       final data = Data();
       final teams = data.getTeamList();
       final competitions = data.getSampleCompetitions();
-      
+
       setState(() {
-        print('-------------------------------------Setstate called-------------------------------------');
+        print(
+          '-------------------------------------Setstate called-------------------------------------',
+        );
         teamList = teams;
         compList = competitions;
         filteredTeamList = teams;
@@ -86,14 +88,16 @@ class _HomeState extends State<Home> {
 
     final lowercaseQuery = query.toLowerCase();
     setState(() {
-      filteredTeamList = teamList.where((team) {
-        return team.name.toLowerCase().contains(lowercaseQuery) ||
-               team.teamLeader.toLowerCase().contains(lowercaseQuery);
-      }).toList();
+      filteredTeamList =
+          teamList.where((team) {
+            return team.name.toLowerCase().contains(lowercaseQuery) ||
+                team.teamLeader.toLowerCase().contains(lowercaseQuery);
+          }).toList();
 
-      filteredCompList = compList.where((competition) {
-        return competition.name.toLowerCase().contains(lowercaseQuery);
-      }).toList();
+      filteredCompList =
+          compList.where((competition) {
+            return competition.name.toLowerCase().contains(lowercaseQuery);
+          }).toList();
     });
   }
 
@@ -102,10 +106,7 @@ class _HomeState extends State<Home> {
       return Center(
         child: Text(
           'No teams found',
-          style: TextStyle(
-            color: CustomColors().searchBarText,
-            fontSize: 18,
-          ),
+          style: TextStyle(color: CustomColors().searchBarText, fontSize: 18),
         ),
       );
     }
@@ -132,10 +133,7 @@ class _HomeState extends State<Home> {
       return Center(
         child: Text(
           'No competitions found',
-          style: TextStyle(
-            color: CustomColors().searchBarText,
-            fontSize: 18,
-          ),
+          style: TextStyle(color: CustomColors().searchBarText, fontSize: 18),
         ),
       );
     }
@@ -154,9 +152,7 @@ class _HomeState extends State<Home> {
 
   Widget _buildContent() {
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (error != null) {
@@ -164,62 +160,50 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              error!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 16,
-              ),
-            ),
+            Text(error!, style: TextStyle(color: Colors.red, fontSize: 16)),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadData, child: Text('Retry')),
           ],
         ),
       );
     }
 
-    return viewMode == ViewMode.teams ? _buildTeamsList() : _buildCompetitionsList();
+    return viewMode == ViewMode.teams
+        ? _buildTeamsList()
+        : _buildCompetitionsList();
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: CustomColors().bg,
-      body: Column(
-        children: [
-          SizedBox(height: height * 0.1),
-          Expanded(
-            flex: 1,
-            child: ModeSwitcher(
-              width: MediaQuery.of(context).size.width * 0.7,
-              thumbColor:
-                  viewMode == ViewMode.teams
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.green.withValues(alpha: 0.5),
-              mode: viewMode == ViewMode.teams,
-              onChanged: (x) {
-                setState(() {
-                  viewMode = x ? ViewMode.teams : ViewMode.competitions;
-                });
-              },
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: CustomColors().bg,
+        body: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ModeSwitcher(
+                width: MediaQuery.of(context).size.width * 0.7,
+                thumbColor:
+                    viewMode == ViewMode.teams
+                        ? Theme.of(context).colorScheme.primary
+                        : Colors.green.withValues(alpha: 0.5),
+                mode: viewMode == ViewMode.teams,
+                onChanged: (x) {
+                  setState(() {
+                    viewMode = x ? ViewMode.teams : ViewMode.competitions;
+                  });
+                },
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          CustomSearchBar(
-            controller: controller,
-            onChanged: filterLists,
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            flex: 8,
-            child: Container(child: _buildContent()),
-          ),
-        ],
+            SizedBox(height: 10),
+            CustomSearchBar(controller: controller, onChanged: filterLists),
+            SizedBox(height: 20),
+            Expanded(flex: 8, child: Container(child: _buildContent())),
+          ],
+        ),
       ),
     );
   }
