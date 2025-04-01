@@ -25,13 +25,11 @@ class DataProvider extends ChangeNotifier {
 
   Future<void> loadData() async {
     try {
-      _isLoading = true;
-      _error = null;
       notifyListeners();
 
       final data = Data();
       // _teams = data.getTeamList();
-      _competitions = data.getSampleCompetitions();
+      // _competitions = data.();
       _filteredTeams = _teams;
       _filteredCompetitions = _competitions;
 
@@ -61,7 +59,7 @@ class DataProvider extends ChangeNotifier {
     _filteredTeams =
         _teams.where((team) {
           return team.name.toLowerCase().contains(lowercaseQuery) ||
-              team.teamLeader.toLowerCase().contains(lowercaseQuery);
+              team.leader.toLowerCase().contains(lowercaseQuery);
         }).toList();
 
     _filteredCompetitions =

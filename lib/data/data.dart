@@ -48,7 +48,7 @@ class Data {
     }
   }
 
-  List<Competition> getSampleCompetitions() {
+  Future<List<Competition>> getCompetitionsList(BuildContext context) async {
     return [
       Competition(
         name: "National Chess Tournament",

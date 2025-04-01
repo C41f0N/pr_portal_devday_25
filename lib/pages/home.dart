@@ -27,39 +27,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Team>? teams = [];
   List<Competition>? competitions = [];
   final TextEditingController controller = TextEditingController();
   ViewMode viewMode = ViewMode.teams;
-  bool isLoading = true;
-  String? error;
 
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
-  Future<void> getData() async {
-    try {
-      setState(() {
-        isLoading = true;
-        error = null;
-      });
+  Future<List<Team>?> getTeamList() async {
+    var data = Data();
+    return await data.getTeamList(context);
+  }
 
-      final data = Data();
-      teams = await data.getTeamList(context);
-      competitions = data.getSampleCompetitions();
-
-      setState(() {
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        error = 'Failed to load data: $e';
-        isLoading = false;
-      });
-    }
+  Future<List<Competition>?> getCompetitionsList() async {
+    var data = Data();
+    return await data.getCompetitionsList(context);
   }
 
   @override
@@ -68,128 +52,108 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  // void filterLists(String query) {
-  //   if (query.isEmpty) {
-  //     setState(() {
-  //       filteredTeamList = teams;
-  //       filteredCompList = competitions;
-  //     });
-  //     return;
-  //   }
-
-  //   final lowercaseQuery = query.toLowerCase();
-  //   setState(() {
-  //     filteredTeamList =
-  //         teams.where((team) {
-  //           return team.name.toLowerCase().contains(lowercaseQuery) ||
-  //               team.teamLeader.toLowerCase().contains(lowercaseQuery);
-  //         }).toList();
-
-  //     filteredCompList =
-  //         competitions.where((competition) {
-  //           return competition.name.toLowerCase().contains(lowercaseQuery);
-  //         }).toList();
-  //   });
-  // }
-
-  Widget getTeamsList() {
-    if (teams == null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("An unknown error occcoured"),
-            SizedBox(height: 10),
-            ElevatedButton(onPressed: getData, child: Text("Retry")),
-          ],
-        ),
-      );
-    }
-
-    if (teams!.isEmpty) {
-      return Center(
-        child: Text(
-          'No teams found',
-          style: TextStyle(color: CustomColors().searchBarText, fontSize: 18),
-        ),
-      );
-    }
-
-    return ListView.separated(
-      padding: EdgeInsets.only(bottom: 20),
-      itemCount: teams!.length,
-      itemBuilder: (context, index) {
-        return TeamTile(
-          team: teams![index],
-          onTap: () {
-            // TODO: Implement team selection logic
-          },
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: 16);
-      },
-    );
-  }
-
-  Widget getCompetitionsList() {
-    if (teams == null) {
-      return Center(
-        child: Column(
-          children: [
-            Text("An unknown error occcoured"),
-            ElevatedButton(onPressed: getData, child: Text("Retry")),
-          ],
-        ),
-      );
-    }
-
-    if (competitions!.isEmpty) {
-      return Center(
-        child: Text(
-          'No competitions found',
-          style: TextStyle(color: CustomColors().searchBarText, fontSize: 18),
-        ),
-      );
-    }
-
-    return ListView.separated(
-      padding: EdgeInsets.only(bottom: 20),
-      itemCount: competitions!.length,
-      itemBuilder: (context, index) {
-        return CompetitionTile(competition: competitions![index]);
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: 16);
-      },
-    );
-  }
-
-  Widget _buildContent() {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (error != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(error!, style: TextStyle(color: Colors.red, fontSize: 16)),
-            SizedBox(height: 16),
-            ElevatedButton(onPressed: getData, child: Text('Retry')),
-          ],
-        ),
-      );
-    }
-
-    return viewMode == ViewMode.teams ? getTeamsList() : getCompetitionsList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    Widget teamsListView = FutureBuilder(
+      future: getTeamList(),
+      builder: (context, future) {
+        if (future.connectionState == ConnectionState.done) {
+          if (future.data == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("An unknown error occcoured"),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    child: Text("Retry"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            List<Team> teams = future.data!;
+
+            teams.removeWhere((team) {
+              return !team.name.toLowerCase().contains(
+                    controller.text.toLowerCase(),
+                  ) &&
+                  !team.leader.toLowerCase().contains(
+                    controller.text.toLowerCase(),
+                  );
+            });
+
+            return ListView.separated(
+              padding: EdgeInsets.only(bottom: 20),
+              itemCount: teams.length,
+              itemBuilder: (context, index) {
+                return TeamTile(
+                  team: teams[index],
+                  onTap: () {
+                    // TODO: Implement team selection logic
+                  },
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 16);
+              },
+            );
+          }
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
+    Widget competitionsListView = FutureBuilder(
+      future: getCompetitionsList(),
+      builder: (context, future) {
+        if (future.connectionState == ConnectionState.done) {
+          if (future.data == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("An unknown error occcoured"),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    child: Text("Retry"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            List<Competition> competitions = future.data!;
+            competitions.removeWhere((competition) {
+              return !competition.name.toLowerCase().contains(
+                controller.text.toLowerCase(),
+              );
+            });
+            return ListView.separated(
+              padding: EdgeInsets.only(bottom: 20),
+              itemCount: competitions.length,
+              itemBuilder: (context, index) {
+                return CompetitionTile(competition: competitions[index]);
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 16);
+              },
+            );
+          }
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
 
     return SafeArea(
       child: Scaffold(
@@ -213,11 +177,21 @@ class _HomeState extends State<Home> {
                 },
               ),
 
-              CustomSearchBar(controller: controller, onChanged: (s) {}),
+              CustomSearchBar(
+                controller: controller,
+                onChanged: (s) {
+                  setState(() {});
+                },
+              ),
 
               SizedBox(
                 height: height * 0.75,
-                child: Container(child: _buildContent()),
+                child: Container(
+                  child:
+                      viewMode == ViewMode.teams
+                          ? teamsListView
+                          : competitionsListView,
+                ),
               ),
             ],
           ),
