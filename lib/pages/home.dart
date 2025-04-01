@@ -233,7 +233,47 @@ class _HomeState extends State<Home> {
               padding: EdgeInsets.only(bottom: 20),
               itemCount: competitions.length,
               itemBuilder: (context, index) {
-                return CompetitionTile(competition: competitions[index]);
+                return CompetitionTile(
+                  competition: competitions[index],
+                  onTimeUpdate: (
+                    DateTime newStartTime,
+                    DateTime newEndTime,
+                  ) async {
+                    // show loading indicator
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Updating competition time...')),
+                    );
+
+                    // call the API to update the competition time
+                    bool success = await Data().updateCompetitionTime(
+                      context,
+                      competitions[index].name,
+                      newStartTime,
+                      newEndTime,
+                    );
+
+                    if (success) {
+                      // refresh the list to show updated times
+                      setState(() {
+                        // force refresh
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Competition time updated successfully',
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to update competition time'),
+                        ),
+                      );
+                    }
+                  },
+                );
               },
               separatorBuilder: (BuildContext context, int index) {
                 return SizedBox(height: 16);

@@ -16,10 +16,12 @@ class CompetitionTile extends StatelessWidget {
     super.key,
     // required this.backgroundColor,
     required this.competition,
+    this.onTimeUpdate,
   });
 
   // final Color backgroundColor;
   final Competition competition;
+  final Function(DateTime startTime, DateTime endTime)? onTimeUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +33,8 @@ class CompetitionTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        showDialog(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: Text(competition.name),
-                // content: Column(
-                //   children: [
-                //     DatePickerDialog(firstDate: firstDate, lastDate: lastDate);
-                //   ],
-                // ),
-              ),
-        );
+        _showTimeUpdateDialog(context);
       },
-
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
         decoration: BoxDecoration(
@@ -118,6 +108,136 @@ class CompetitionTile extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  void _showTimeUpdateDialog(BuildContext context) {
+    DateTime newStartTime = competition.startTime;
+    DateTime newEndTime = competition.endTime;
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => StatefulBuilder(
+            builder:
+                (context, setState) => AlertDialog(
+                  backgroundColor: CustomColors().darkRed.withOpacity(0.95),
+                  title: Text(
+                    competition.name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildTimePicker(context, "Start Time", newStartTime, (
+                        time,
+                      ) {
+                        setState(() {
+                          // Use setState to trigger rebuild
+                          newStartTime = _combineDateAndTime(
+                            competition.startTime,
+                            time,
+                          );
+                        });
+                      }),
+                      SizedBox(height: 20),
+                      _buildTimePicker(context, "End Time", newEndTime, (time) {
+                        setState(() {
+                          // use setState to trigger rebuild
+                          newEndTime = _combineDateAndTime(
+                            competition.endTime,
+                            time,
+                          );
+                        });
+                      }),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors().lightRed,
+                      ),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        if (onTimeUpdate != null) {
+                          onTimeUpdate!(newStartTime, newEndTime);
+                        }
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+          ),
+    );
+  }
+
+  Widget _buildTimePicker(
+    BuildContext context,
+    String label,
+    DateTime initialTime,
+    Function(TimeOfDay) onTimeSelected,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label + ":", style: TextStyle(color: Colors.white, fontSize: 16)),
+        InkWell(
+          onTap: () async {
+            final TimeOfDay? picked = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(initialTime),
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: ThemeData.dark().copyWith(
+                    colorScheme: ColorScheme.dark(
+                      primary: CustomColors().lightRed,
+                      onPrimary: Colors.white,
+                      surface: CustomColors().darkRed,
+                      onSurface: Colors.white,
+                    ),
+                    dialogBackgroundColor: CustomColors().darkRed,
+                  ),
+                  child: child!,
+                );
+              },
+            );
+            if (picked != null) {
+              onTimeSelected(picked);
+            }
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: CustomColors().lightRed,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              DateFormat("hh:mm a").format(initialTime),
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  DateTime _combineDateAndTime(DateTime original, TimeOfDay timeOfDay) {
+    return DateTime(
+      original.year,
+      original.month,
+      original.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
     );
   }
 }

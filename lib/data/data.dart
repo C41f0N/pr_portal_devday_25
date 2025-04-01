@@ -164,4 +164,59 @@ class Data {
       return "FAILED";
     }
   }
+
+  Future<bool> updateCompetitionTime(
+    BuildContext context,
+    String competitionName,
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    try {
+      PRPortal prPortal = context.read<PRPortal>();
+
+      final startTimeUtc = DateTime.utc(
+        startTime.year,
+        startTime.month,
+        startTime.day,
+        startTime.hour,
+        startTime.minute,
+      );
+
+      final endTimeUtc = DateTime.utc(
+        endTime.year,
+        endTime.month,
+        endTime.day,
+        endTime.hour,
+        endTime.minute,
+      );
+
+      var response = await http.post(
+        Uri.parse("$serverUrl/api/admin/updatetime"),
+        headers: {
+          'Content-Type': 'application/json',
+          "Cookie": "token=${prPortal.token};",
+        },
+        body: jsonEncode({
+          "competitionName": competitionName,
+          "start_time": startTimeUtc.toIso8601String(),
+          "end_time": endTimeUtc.toIso8601String(),
+        }),
+      );
+
+      // Rest of the function unchanged
+      if (response.statusCode == 200) {
+        return true;
+      } else if (response.statusCode == 401) {
+        prPortal.setLoggedIn(false);
+        return false;
+      } else {
+        print("Update competition time failed: ${response.statusCode}");
+        print(response.body);
+        return false;
+      }
+    } catch (e) {
+      print("Exception in updateCompetitionTime: $e");
+      return false;
+    }
+  }
 }
