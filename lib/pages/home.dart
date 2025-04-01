@@ -9,11 +9,13 @@
 import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/competition.dart';
+import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/models/team.dart';
 import 'package:pr_portal_devday_25/widgets/competition_tile.dart';
 import 'package:pr_portal_devday_25/widgets/mode_switcher.dart';
 import 'package:pr_portal_devday_25/widgets/search_bar.dart';
 import 'package:pr_portal_devday_25/widgets/team_tile.dart';
+import 'package:provider/provider.dart';
 
 import '../data/data.dart';
 
@@ -98,6 +100,89 @@ class _HomeState extends State<Home> {
                   onTap: () {
                     // TODO: Implement team selection logic
                   },
+                  onChanged: (x) {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text(
+                              'Are you sure?',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            content:
+                                teams[index].attendance
+                                    ? Text(
+                                      'Mark ${teams[index].name} as ABSENT??',
+                                    )
+                                    : Text(
+                                      'Mark ${teams[index].name} as PRESENT?',
+                                    ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed:
+                                    () =>
+                                        Navigator.pop(context), // Cancel action
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  String? result =
+                                      teams[index].attendance
+                                          ? await Data().unmarkAttendance(
+                                            context,
+                                            teams[index],
+                                          )
+                                          : await Data().markAttendance(
+                                            context,
+                                            teams[index],
+                                          );
+
+                                  if (result == "FAILED") {
+                                    Navigator.pop(context); // Close dialog
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (context) => AlertDialog(
+                                            title: Text(
+                                              "Something went wrong.",
+                                            ),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                    context,
+                                                  ); // Close dialog
+                                                },
+                                                child: Text("Okay"),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+                                  } else {
+                                    setState(() {});
+                                    Navigator.pop(context); // Close dialog
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Yes',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
                 );
               },
               separatorBuilder: (BuildContext context, int index) {
@@ -155,48 +240,62 @@ class _HomeState extends State<Home> {
       },
     );
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: CustomColors().bg,
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ModeSwitcher(
-                width:
-                    width < height
-                        ? MediaQuery.of(context).size.width - width * 0.1
-                        : 500,
-                thumbColor: Theme.of(context).colorScheme.primary,
-                mode: viewMode == ViewMode.teams,
-                onChanged: (x) {
-                  setState(() {
-                    viewMode = x ? ViewMode.teams : ViewMode.competitions;
-                  });
-                },
-              ),
+    double paddingRatio = 0.1;
 
-              CustomSearchBar(
-                controller: controller,
-                onChanged: (s) {
-                  setState(() {});
-                },
+    return Consumer<PRPortal>(
+      builder: (context, prPortal, widget1) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: CustomColors().bg,
+            body: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: width * paddingRatio / 2,
               ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      ModeSwitcher(
+                        width:
+                            width < height
+                                ? MediaQuery.of(context).size.width -
+                                    width * paddingRatio
+                                : 500,
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        mode: viewMode == ViewMode.teams,
+                        onChanged: (x) {
+                          setState(() {
+                            viewMode =
+                                x ? ViewMode.teams : ViewMode.competitions;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
 
-              SizedBox(
-                height: height * 0.75,
-                child: Container(
-                  child:
-                      viewMode == ViewMode.teams
-                          ? teamsListView
-                          : competitionsListView,
-                ),
+                  CustomSearchBar(
+                    controller: controller,
+                    onChanged: (s) {
+                      setState(() {});
+                    },
+                  ),
+
+                  SizedBox(
+                    height: height * 0.75,
+                    child: Container(
+                      child:
+                          viewMode == ViewMode.teams
+                              ? teamsListView
+                              : competitionsListView,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

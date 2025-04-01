@@ -7,13 +7,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
+import 'package:pr_portal_devday_25/data/data.dart';
+import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/models/team.dart';
+import 'package:provider/provider.dart';
 
 class TeamTile extends StatefulWidget {
-  const TeamTile({super.key, required this.team, required this.onTap});
+  const TeamTile({
+    super.key,
+    required this.team,
+    required this.onTap,
+    required this.onChanged,
+  });
 
   final VoidCallback onTap;
   final Team team;
+  final Function(bool) onChanged;
 
   @override
   State<TeamTile> createState() => _TeamTileState();
@@ -55,57 +64,7 @@ class _TeamTileState extends State<TeamTile> {
               child: Switch(
                 value: widget.team.attendance,
                 activeColor: Colors.grey[200],
-                onChanged: (x) {
-                  showDialog(
-                    context: context,
-                    builder:
-                        (context) => AlertDialog(
-                          title: Text(
-                            'Are you sure?',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          content:
-                              widget.team.attendance
-                                  ? Text('Mark ${widget.team.name} as ABSENT??')
-                                  : Text(
-                                    'Mark ${widget.team.name} as PRESENT?',
-                                  ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed:
-                                  () => Navigator.pop(context), // Cancel action
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close dialog
-                                setState(() {
-                                  widget.team.attendance =
-                                      !widget
-                                          .team
-                                          .attendance; // Toggle attendance state
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text(
-                                'Yes',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                  );
-                },
+                onChanged: widget.onChanged,
               ),
             ),
           ],

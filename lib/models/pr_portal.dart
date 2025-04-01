@@ -52,4 +52,8 @@ class PRPortal extends ChangeNotifier {
     saveData();
     notifyListeners();
   }
+
+  void notifyListeners() {
+    notifyListeners();
+  }
 }
