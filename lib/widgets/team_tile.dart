@@ -29,7 +29,7 @@ class _TeamTileState extends State<TeamTile> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
           color:
-              widget.team.present
+              widget.team.attendance
                   ? CustomColors().lightRed
                   : CustomColors().darkRed,
         ),
@@ -42,7 +42,7 @@ class _TeamTileState extends State<TeamTile> {
                 Text(widget.team.name, style: TextStyle(fontSize: 24)),
                 SizedBox(height: 5),
                 Text(
-                  widget.team.teamLeader,
+                  widget.team.leader,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -53,7 +53,7 @@ class _TeamTileState extends State<TeamTile> {
             Transform.scale(
               scale: 0.9,
               child: Switch(
-                value: widget.team.present,
+                value: widget.team.attendance,
                 activeColor: Colors.grey[200],
                 onChanged: (x) {
                   showDialog(
@@ -65,7 +65,7 @@ class _TeamTileState extends State<TeamTile> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           content:
-                              widget.team.present
+                              widget.team.attendance
                                   ? Text('Mark ${widget.team.name} as ABSENT??')
                                   : Text(
                                     'Mark ${widget.team.name} as PRESENT?',
@@ -86,10 +86,10 @@ class _TeamTileState extends State<TeamTile> {
                               onPressed: () {
                                 Navigator.pop(context); // Close dialog
                                 setState(() {
-                                  widget.team.present =
+                                  widget.team.attendance =
                                       !widget
                                           .team
-                                          .present; // Toggle attendance state
+                                          .attendance; // Toggle attendance state
                                 });
                               },
                               style: ElevatedButton.styleFrom(

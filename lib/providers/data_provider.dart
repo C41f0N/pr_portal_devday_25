@@ -30,11 +30,11 @@ class DataProvider extends ChangeNotifier {
       notifyListeners();
 
       final data = Data();
-      _teams = data.getTeamList();
+      // _teams = data.getTeamList();
       _competitions = data.getSampleCompetitions();
       _filteredTeams = _teams;
       _filteredCompetitions = _competitions;
-      
+
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -58,15 +58,17 @@ class DataProvider extends ChangeNotifier {
     }
 
     final lowercaseQuery = query.toLowerCase();
-    _filteredTeams = _teams.where((team) {
-      return team.name.toLowerCase().contains(lowercaseQuery) ||
-             team.teamLeader.toLowerCase().contains(lowercaseQuery);
-    }).toList();
+    _filteredTeams =
+        _teams.where((team) {
+          return team.name.toLowerCase().contains(lowercaseQuery) ||
+              team.teamLeader.toLowerCase().contains(lowercaseQuery);
+        }).toList();
 
-    _filteredCompetitions = _competitions.where((competition) {
-      return competition.name.toLowerCase().contains(lowercaseQuery);
-    }).toList();
+    _filteredCompetitions =
+        _competitions.where((competition) {
+          return competition.name.toLowerCase().contains(lowercaseQuery);
+        }).toList();
 
     notifyListeners();
   }
-} 
+}

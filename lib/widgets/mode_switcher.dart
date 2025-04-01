@@ -136,7 +136,7 @@ class _ModeSwitcherState extends State<ModeSwitcher> {
                 ),
               ),
               AnimatedContainer(
-                duration: const Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.fastEaseInToSlowEaseOut,
                 transform: Matrix4.translation(
                   math.Vector3(

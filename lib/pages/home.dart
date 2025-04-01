@@ -27,10 +27,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Team> teamList = [];
-  List<Competition> compList = [];
-  List<Team> filteredTeamList = [];
-  List<Competition> filteredCompList = [];
+  List<Team>? teams = [];
+  List<Competition>? competitions = [];
   final TextEditingController controller = TextEditingController();
   ViewMode viewMode = ViewMode.teams;
   bool isLoading = true;
@@ -39,10 +37,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    getData();
   }
 
-  Future<void> _loadData() async {
+  Future<void> getData() async {
     try {
       setState(() {
         isLoading = true;
@@ -50,17 +48,10 @@ class _HomeState extends State<Home> {
       });
 
       final data = Data();
-      final teams = data.getTeamList();
-      final competitions = data.getSampleCompetitions();
+      teams = await data.getTeamList(context);
+      competitions = data.getSampleCompetitions();
 
       setState(() {
-        print(
-          '-------------------------------------Setstate called-------------------------------------',
-        );
-        teamList = teams;
-        compList = competitions;
-        filteredTeamList = teams;
-        filteredCompList = competitions;
         isLoading = false;
       });
     } catch (e) {
@@ -77,32 +68,45 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void filterLists(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        filteredTeamList = teamList;
-        filteredCompList = compList;
-      });
-      return;
+  // void filterLists(String query) {
+  //   if (query.isEmpty) {
+  //     setState(() {
+  //       filteredTeamList = teams;
+  //       filteredCompList = competitions;
+  //     });
+  //     return;
+  //   }
+
+  //   final lowercaseQuery = query.toLowerCase();
+  //   setState(() {
+  //     filteredTeamList =
+  //         teams.where((team) {
+  //           return team.name.toLowerCase().contains(lowercaseQuery) ||
+  //               team.teamLeader.toLowerCase().contains(lowercaseQuery);
+  //         }).toList();
+
+  //     filteredCompList =
+  //         competitions.where((competition) {
+  //           return competition.name.toLowerCase().contains(lowercaseQuery);
+  //         }).toList();
+  //   });
+  // }
+
+  Widget getTeamsList() {
+    if (teams == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("An unknown error occcoured"),
+            SizedBox(height: 10),
+            ElevatedButton(onPressed: getData, child: Text("Retry")),
+          ],
+        ),
+      );
     }
 
-    final lowercaseQuery = query.toLowerCase();
-    setState(() {
-      filteredTeamList =
-          teamList.where((team) {
-            return team.name.toLowerCase().contains(lowercaseQuery) ||
-                team.teamLeader.toLowerCase().contains(lowercaseQuery);
-          }).toList();
-
-      filteredCompList =
-          compList.where((competition) {
-            return competition.name.toLowerCase().contains(lowercaseQuery);
-          }).toList();
-    });
-  }
-
-  Widget _buildTeamsList() {
-    if (filteredTeamList.isEmpty) {
+    if (teams!.isEmpty) {
       return Center(
         child: Text(
           'No teams found',
@@ -113,10 +117,10 @@ class _HomeState extends State<Home> {
 
     return ListView.separated(
       padding: EdgeInsets.only(bottom: 20),
-      itemCount: filteredTeamList.length,
+      itemCount: teams!.length,
       itemBuilder: (context, index) {
         return TeamTile(
-          team: filteredTeamList[index],
+          team: teams![index],
           onTap: () {
             // TODO: Implement team selection logic
           },
@@ -128,8 +132,19 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildCompetitionsList() {
-    if (filteredCompList.isEmpty) {
+  Widget getCompetitionsList() {
+    if (teams == null) {
+      return Center(
+        child: Column(
+          children: [
+            Text("An unknown error occcoured"),
+            ElevatedButton(onPressed: getData, child: Text("Retry")),
+          ],
+        ),
+      );
+    }
+
+    if (competitions!.isEmpty) {
       return Center(
         child: Text(
           'No competitions found',
@@ -140,9 +155,9 @@ class _HomeState extends State<Home> {
 
     return ListView.separated(
       padding: EdgeInsets.only(bottom: 20),
-      itemCount: filteredCompList.length,
+      itemCount: competitions!.length,
       itemBuilder: (context, index) {
-        return CompetitionTile(competition: filteredCompList[index]);
+        return CompetitionTile(competition: competitions![index]);
       },
       separatorBuilder: (BuildContext context, int index) {
         return SizedBox(height: 16);
@@ -162,15 +177,13 @@ class _HomeState extends State<Home> {
           children: [
             Text(error!, style: TextStyle(color: Colors.red, fontSize: 16)),
             SizedBox(height: 16),
-            ElevatedButton(onPressed: _loadData, child: Text('Retry')),
+            ElevatedButton(onPressed: getData, child: Text('Retry')),
           ],
         ),
       );
     }
 
-    return viewMode == ViewMode.teams
-        ? _buildTeamsList()
-        : _buildCompetitionsList();
+    return viewMode == ViewMode.teams ? getTeamsList() : getCompetitionsList();
   }
 
   @override
@@ -187,7 +200,10 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ModeSwitcher(
-                width: MediaQuery.of(context).size.width - width * 0.1,
+                width:
+                    width < height
+                        ? MediaQuery.of(context).size.width - width * 0.1
+                        : 500,
                 thumbColor: Theme.of(context).colorScheme.primary,
                 mode: viewMode == ViewMode.teams,
                 onChanged: (x) {
@@ -197,7 +213,7 @@ class _HomeState extends State<Home> {
                 },
               ),
 
-              CustomSearchBar(controller: controller, onChanged: filterLists),
+              CustomSearchBar(controller: controller, onChanged: (s) {}),
 
               SizedBox(
                 height: height * 0.75,
