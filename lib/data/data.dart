@@ -10,10 +10,12 @@ import '../models/competition.dart';
 import '../models/team.dart';
 
 class Data {
+  // Takes buildcontext, returns null if error, or a list of teams if success
   Future<List<Team>?> getTeamList(BuildContext context) async {
     try {
       PRPortal prPortal = context.read<PRPortal>();
 
+      // Sending request to api with the token
       var response = await http.get(
         Uri.parse("$serverUrl/api/admin/getAllTeams"),
         headers: {
@@ -22,22 +24,22 @@ class Data {
         },
       );
 
-      // If all good
+      // If success
       if (response.statusCode == 200) {
-        response.body;
-        // print(jsonDecode(response.body));
+        // Decode json body to List of Team object and return
         return (jsonDecode(response.body) as List<dynamic>)
             .map((x) => Team.fromJson(x))
             .toList();
       }
       // If token expired
       else if (response.statusCode == 401) {
+        // Log out the user
         prPortal.setLoggedIn(false);
+        return null;
       }
       // if unknown error
       else {
         print(response.statusCode);
-
         return null;
       }
     }
