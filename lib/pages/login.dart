@@ -22,9 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  String? usernameError;
-  String? passwordError;
-
   @override
   void dispose() {
     usernameController.dispose();
@@ -65,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         hintText: 'Username',
-                        errorText: passwordError,
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
@@ -103,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         hintText: 'Password',
-                        errorText: passwordError,
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
@@ -128,19 +123,9 @@ class _LoginPageState extends State<LoginPage> {
                     height: 55,
                     child: TextButton(
                       onPressed: () async {
-                        // Giving error messages
-                        usernameError =
-                            usernameController.text.isEmpty
-                                ? "Enter a username"
-                                : null;
-                        passwordError =
-                            passwordController.text.isEmpty
-                                ? "Enter a password"
-                                : null;
-                        setState(() {});
-
                         // Login logic
-                        if (usernameError == null && passwordError == null) {
+                        if (usernameController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty) {
                           String result = await authenticate(
                             usernameController.text,
                             passwordController.text,
