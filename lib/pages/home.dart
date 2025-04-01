@@ -14,6 +14,7 @@ import 'package:pr_portal_devday_25/models/team.dart';
 import 'package:pr_portal_devday_25/widgets/competition_tile.dart';
 import 'package:pr_portal_devday_25/widgets/mode_switcher.dart';
 import 'package:pr_portal_devday_25/widgets/search_bar.dart';
+import 'package:pr_portal_devday_25/widgets/team_description_dialogue.dart';
 import 'package:pr_portal_devday_25/widgets/team_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -98,7 +99,12 @@ class _HomeState extends State<Home> {
                 return TeamTile(
                   team: teams[index],
                   onTap: () {
-                    // TODO: Implement team selection logic
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) =>
+                              TeamDescriptionDialogue(team: teams[index]),
+                    );
                   },
                   onChanged: (x) {
                     showDialog(

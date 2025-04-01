@@ -53,7 +53,7 @@ class PRPortal extends ChangeNotifier {
     notifyListeners();
   }
 
-  void notifyListeners() {
+  void refresh() {
     notifyListeners();
   }
 }

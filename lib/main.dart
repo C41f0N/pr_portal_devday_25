@@ -27,12 +27,25 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => PRPortal(),
       builder: (context, widget1) {
+        Color primaryColor = const Color.fromARGB(255, 175, 40, 43);
+
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Participant Relations Portal',
           theme: ThemeData(
-            colorScheme: ColorScheme.dark(
-              primary: const Color.fromARGB(255, 175, 40, 43),
+            colorScheme: ColorScheme.dark(primary: primaryColor),
+            dialogTheme: DialogTheme(
+              backgroundColor: const Color.fromARGB(
+                255,
+                13,
+                13,
+                13,
+              ).withValues(alpha: 0.9),
+              titleTextStyle: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
           ),
           home: const LoginHandler(),

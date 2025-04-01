@@ -53,4 +53,24 @@ class Team {
     this.competition = json["Competition"];
     this.attendance = json["attendance"] ?? false;
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "consumerNumber": this.consumerNumber,
+      "Team_Name": this.name,
+      "Leader_name": this.leader,
+      "Leader_email": this.leaderEmail,
+      "mem1_name": this.member1,
+      'mem1_email': this.member1Email,
+      "mem2_name": this.member2,
+      'mem2_email': this.member2Email,
+      "mem3_name": this.member3,
+      'mem3_email': this.member3Email,
+      "mem4_name": this.member4,
+      'mem4_email': this.member4Email,
+      "att_code": this.att_code,
+      "Competition": this.competition,
+      "attendance": this.attendance,
+    };
+  }
 }
