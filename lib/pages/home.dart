@@ -295,113 +295,123 @@ class _HomeState extends State<Home> {
                 horizontal: width * paddingRatio / 2,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(90),
-                            child: CircleAvatar(
-                              foregroundColor: Colors.white,
-                              child: Transform.translate(
-                                offset: Offset(0, 5),
-                                child: Transform.scale(
-                                  scale: 1.8,
-                                  child: Icon(Icons.person),
+                  SizedBox(
+                    height: height * 0.15,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(90),
+                              child: CircleAvatar(
+                                foregroundColor: Colors.white,
+                                child: Transform.translate(
+                                  offset: Offset(0, 5),
+                                  child: Transform.scale(
+                                    scale: 1.8,
+                                    child: Icon(Icons.person),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(
-                            "${prPortal.username!}",
-                            style: TextStyle(
-                              color: CustomColors().lightRed,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                            SizedBox(width: 15),
+                            Text(
+                              "${prPortal.username!}",
+                              style: TextStyle(
+                                color: CustomColors().lightRed,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      CircleAvatar(
-                        backgroundColor: CustomColors().darkRed,
-                        child: IconButton(
-                          color: Colors.white,
-                          iconSize: 20,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    title: Text(
-                                      "Are you sure you want to logout?",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor:
-                                              CustomColors().lightRed,
-                                        ),
-                                        onPressed: () {
-                                          prPortal.setLoggedIn(false, null);
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("Yes"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("No"),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                          },
-                          icon: Icon(Icons.logout),
+                          ],
                         ),
-                      ),
-                    ],
+                        CircleAvatar(
+                          backgroundColor: CustomColors().darkRed,
+                          child: IconButton(
+                            color: Colors.white,
+                            iconSize: 20,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      title: Text(
+                                        "Are you sure you want to logout?",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor: Colors.white,
+                                            backgroundColor:
+                                                CustomColors().lightRed,
+                                          ),
+                                          onPressed: () {
+                                            prPortal.setLoggedIn(false, null);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Yes"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("No"),
+                                        ),
+                                      ],
+                                    ),
+                              );
+                            },
+                            icon: Icon(Icons.logout),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      ModeSwitcher(
-                        width:
-                            width < height
-                                ? MediaQuery.of(context).size.width -
-                                    width * paddingRatio
-                                : 500,
-                        thumbColor: Theme.of(context).colorScheme.primary,
-                        mode: viewMode == ViewMode.teams,
-                        onChanged: (x) {
-                          setState(() {
-                            viewMode =
-                                x ? ViewMode.teams : ViewMode.competitions;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  Container(
+                    height: height * 0.2,
+                    // color: Colors.pink,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ModeSwitcher(
+                          width:
+                              width < height
+                                  ? MediaQuery.of(context).size.width -
+                                      width * paddingRatio
+                                  : 500,
+                          thumbColor: Theme.of(context).colorScheme.primary,
+                          mode: viewMode == ViewMode.teams,
+                          onChanged: (x) {
+                            setState(() {
+                              viewMode =
+                                  x ? ViewMode.teams : ViewMode.competitions;
+                            });
+                          },
+                        ),
 
-                  CustomSearchBar(
-                    controller: controller,
-                    onChanged: (s) {
-                      setState(() {});
-                    },
+                        CustomSearchBar(
+                          controller: controller,
+                          onChanged: (s) {
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
                   ),
 
                   ClipRect(
-                    child: SizedBox(
-                      height: height * 0.7,
+                    child: Container(
+                      // color: Colors.blue,
+                      height: height * 0.65,
                       child: CustomMaterialIndicator(
                         onRefresh: () async {
                           setState(() {});
