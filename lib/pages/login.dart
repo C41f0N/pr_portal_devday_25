@@ -6,6 +6,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/data/authentication.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/widgets/heading.dart';
@@ -67,15 +68,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         fillColor: Color.fromARGB(255, 63, 63, 63),
                         filled: true,
-                        border: OutlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
                           borderSide: BorderSide(
-                            color: Color.fromARGB(
-                              255,
-                              63,
-                              63,
-                              63,
-                            ), // Border color
+                            //   color: Color.fromARGB(
+                            //     255,
+                            //     36,
+                            //     36,
+                            //     36,
+                            //   ), // Border color
                             width: 1.0, // Border width
                           ),
                         ),
@@ -104,10 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         fillColor: Color.fromARGB(255, 63, 63, 63),
                         filled: true,
-                        border: OutlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
                           borderSide: BorderSide(
-                            color: Color.fromARGB(255, 63, 63, 63),
+                            // color: Color.fromARGB(255, 63, 63, 63),
                             width: 1.0,
                           ),
                         ),
@@ -126,12 +127,22 @@ class _LoginPageState extends State<LoginPage> {
                         // Login logic
                         if (usernameController.text.isNotEmpty &&
                             passwordController.text.isNotEmpty) {
+                          // Show loading dialogue
+                          showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder:
+                                (_) =>
+                                    Center(child: CircularProgressIndicator()),
+                          );
+
                           String result = await authenticate(
                             usernameController.text,
                             passwordController.text,
                           );
 
                           if (result == "UNAUTHORIZED") {
+                            Navigator.pop(context);
                             showDialog(
                               context: context,
                               builder:
@@ -141,6 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     actions: [
                                       ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor:
+                                              CustomColors().lightRed,
+                                        ),
                                         onPressed:
                                             () => Navigator.of(context).pop(),
                                         child: Text("Okay"),
@@ -149,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                             );
                           } else if (result == "FAILED") {
+                            Navigator.pop(context);
                             showDialog(
                               context: context,
                               builder:
@@ -156,6 +173,11 @@ class _LoginPageState extends State<LoginPage> {
                                     title: Text("An unknown error occoured"),
                                     actions: [
                                       ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor:
+                                              CustomColors().lightRed,
+                                        ),
                                         onPressed:
                                             () => Navigator.of(context).pop(),
                                         child: Text("Okay"),
@@ -164,13 +186,14 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                             );
                           } else {
+                            Navigator.pop(context);
                             prPortal.setToken(result);
                             prPortal.setLoggedIn(true, usernameController.text);
                           }
                         }
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: CustomColors().lightRed,
                         foregroundColor: Colors.white,
                       ),
                       child: const Text('Go', style: TextStyle(fontSize: 16)),
