@@ -6,6 +6,7 @@
   Includes search functionality for both views.
 */
 
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/competition.dart';
@@ -327,13 +328,30 @@ class _HomeState extends State<Home> {
                     },
                   ),
 
-                  SizedBox(
-                    height: height * 0.75,
-                    child: Container(
-                      child:
-                          viewMode == ViewMode.teams
-                              ? teamsListView
-                              : competitionsListView,
+                  ClipRect(
+                    child: SizedBox(
+                      height: height * 0.75,
+                      child: CustomMaterialIndicator(
+                        onRefresh: () async {
+                          setState(() {});
+                        },
+                        backgroundColor: Colors.transparent,
+                        indicatorBuilder: (context, controller) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.transparent,
+                              color: Colors.redAccent,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          child:
+                              viewMode == ViewMode.teams
+                                  ? teamsListView
+                                  : competitionsListView,
+                        ),
+                      ),
                     ),
                   ),
                 ],
