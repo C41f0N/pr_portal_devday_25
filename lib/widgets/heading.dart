@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pr_portal_devday_25/constants/colors.dart';
 
 class HeadingWidget extends StatelessWidget {
   @override
@@ -19,6 +20,6 @@ class HeadingWidget extends StatelessWidget {
     fontSize: 35, // Increased font size
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic,
-    color: Colors.red,
+    color: CustomColors().lightRed,
   );
 }

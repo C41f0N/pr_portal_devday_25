@@ -12,6 +12,7 @@ import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/competition.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/models/team.dart';
+import 'package:pr_portal_devday_25/utils/utilities.dart';
 import 'package:pr_portal_devday_25/widgets/competition_tile.dart';
 import 'package:pr_portal_devday_25/widgets/mode_switcher.dart';
 import 'package:pr_portal_devday_25/widgets/search_bar.dart';
@@ -283,10 +284,10 @@ class _HomeState extends State<Home> {
       },
     );
 
-    double paddingRatio = 0.1;
-
     return Consumer<PRPortal>(
       builder: (context, prPortal, widget1) {
+        double paddingRatio = isHorizontal(context) ? 0.6 : 0.1;
+
         return SafeArea(
           child: Scaffold(
             backgroundColor: CustomColors().bg,
@@ -384,10 +385,9 @@ class _HomeState extends State<Home> {
                       children: [
                         ModeSwitcher(
                           width:
-                              width < height
-                                  ? MediaQuery.of(context).size.width -
-                                      width * paddingRatio
-                                  : 500,
+                              MediaQuery.of(context).size.width -
+                              width * paddingRatio,
+
                           thumbColor: Theme.of(context).colorScheme.primary,
                           mode: viewMode == ViewMode.teams,
                           onChanged: (x) {

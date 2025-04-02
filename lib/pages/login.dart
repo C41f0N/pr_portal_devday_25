@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/data/authentication.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
+import 'package:pr_portal_devday_25/utils/utilities.dart';
 import 'package:pr_portal_devday_25/widgets/heading.dart';
 import 'package:provider/provider.dart';
 
@@ -40,20 +41,25 @@ class _LoginPageState extends State<LoginPage> {
         return Scaffold(
           body: Center(
             child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(0, height * 0.05, 0, height * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: width * 0.05),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.66,
+                    width:
+                        isHorizontal(context)
+                            ? 500
+                            : MediaQuery.of(context).size.width * 0.66,
                     child: Image.asset("assets/logo.png"),
                   ),
-                  SizedBox(height: height * 0.08),
-                  HeadingWidget(),
-                  SizedBox(height: height * 0.08),
+                  // SizedBox(height: height * 0.08),
+                  // HeadingWidget(),
+                  // SizedBox(height: height * 0.08),
+                  SizedBox(height: height * 0.35),
+
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    width: width * 0.75,
+                    width: isHorizontal(context) ? 500 : width * 0.75,
                     child: TextField(
                       style: TextStyle(
                         color: Color.fromARGB(255, 182, 177, 177),
@@ -66,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
-                        fillColor: Color.fromARGB(255, 63, 63, 63),
+                        fillColor: Color.fromARGB(255, 100, 58, 58),
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
@@ -89,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                   ), //Username Text Field
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    width: width * 0.75,
+                    width: isHorizontal(context) ? 500 : width * 0.75,
                     child: TextField(
                       style: TextStyle(
                         color: Color.fromARGB(255, 182, 177, 177),
@@ -120,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ), //Password Text Field
                   SizedBox(
-                    width: width * 0.75,
+                    width: isHorizontal(context) ? 500 : width * 0.75,
                     height: 55,
                     child: TextButton(
                       onPressed: () async {
