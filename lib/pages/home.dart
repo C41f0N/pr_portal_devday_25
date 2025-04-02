@@ -128,15 +128,6 @@ class _HomeState extends State<Home> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             actions: [
-                              TextButton(
-                                onPressed:
-                                    () =>
-                                        Navigator.pop(context), // Cancel action
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
                               ElevatedButton(
                                 onPressed: () async {
                                   String? result =
@@ -177,12 +168,17 @@ class _HomeState extends State<Home> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                                  backgroundColor: CustomColors().lightRed,
+                                  foregroundColor: Colors.white,
                                 ),
+                                child: Text('Yes'),
+                              ),
+                              TextButton(
+                                onPressed:
+                                    () =>
+                                        Navigator.pop(context), // Cancel action
                                 child: Text(
-                                  'Yes',
+                                  'Cancel',
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ),
@@ -302,6 +298,81 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(90),
+                            child: CircleAvatar(
+                              foregroundColor: Colors.white,
+                              child: Transform.translate(
+                                offset: Offset(0, 5),
+                                child: Transform.scale(
+                                  scale: 1.8,
+                                  child: Icon(Icons.person),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 15),
+                          Text(
+                            "${prPortal.username!}",
+                            style: TextStyle(
+                              color: CustomColors().lightRed,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      CircleAvatar(
+                        backgroundColor: CustomColors().darkRed,
+                        child: IconButton(
+                          color: Colors.white,
+                          iconSize: 20,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: Text(
+                                      "Are you sure you want to logout?",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor:
+                                              CustomColors().lightRed,
+                                        ),
+                                        onPressed: () {
+                                          prPortal.setLoggedIn(false, null);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Yes"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("No"),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          },
+                          icon: Icon(Icons.logout),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
                     children: [
                       ModeSwitcher(
                         width:
@@ -330,17 +401,17 @@ class _HomeState extends State<Home> {
 
                   ClipRect(
                     child: SizedBox(
-                      height: height * 0.75,
+                      height: height * 0.7,
                       child: CustomMaterialIndicator(
                         onRefresh: () async {
                           setState(() {});
                         },
-                        backgroundColor: Colors.transparent,
+                        // backgroundColor: Colors.transparent,
                         indicatorBuilder: (context, controller) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CircularProgressIndicator(
-                              backgroundColor: Colors.transparent,
+                              // backgroundColor: Colors.transparent,
                               color: Colors.redAccent,
                             ),
                           );

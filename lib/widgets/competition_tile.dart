@@ -153,13 +153,6 @@ class CompetitionTile extends StatelessWidget {
                     ],
                   ),
                   actions: [
-                    TextButton(
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors().lightRed,
@@ -174,6 +167,13 @@ class CompetitionTile extends StatelessWidget {
                         }
                         Navigator.of(context).pop();
                       },
+                    ),
+                    TextButton(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
                 ),

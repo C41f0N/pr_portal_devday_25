@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                             );
                           } else {
                             prPortal.setToken(result);
-                            prPortal.setLoggedIn(true);
+                            prPortal.setLoggedIn(true, usernameController.text);
                           }
                         }
                       },

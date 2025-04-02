@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/pages/login_handler.dart';
 import 'package:pr_portal_devday_25/pages/splash.dart';
@@ -33,7 +34,10 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Participant Relations Portal',
           theme: ThemeData(
-            colorScheme: ColorScheme.dark(primary: primaryColor),
+            colorScheme: ColorScheme.dark(
+              primary: primaryColor,
+              surface: CustomColors().darkRed,
+            ),
             dialogTheme: DialogTheme(
               backgroundColor: const Color.fromARGB(
                 255,
@@ -41,11 +45,6 @@ class MyApp extends StatelessWidget {
                 13,
                 13,
               ).withValues(alpha: 0.9),
-              titleTextStyle: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: primaryColor,
-              ),
             ),
           ),
           home: const LoginHandler(),

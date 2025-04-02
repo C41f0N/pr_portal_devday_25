@@ -10,7 +10,11 @@ class TeamDescriptionDialogue extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(team.name, textAlign: TextAlign.center),
-
+      titleTextStyle: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       content: SingleChildScrollView(
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,

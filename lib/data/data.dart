@@ -34,7 +34,7 @@ class Data {
       // If token expired
       else if (response.statusCode == 401) {
         // Log out the user
-        prPortal.setLoggedIn(false);
+        prPortal.setLoggedIn(false, null);
         return null;
       }
       // if unknown error
@@ -73,7 +73,7 @@ class Data {
       // If token expired
       else if (response.statusCode == 401) {
         // Log out the user
-        prPortal.setLoggedIn(false);
+        prPortal.setLoggedIn(false, null);
         return null;
       }
       // if unknown error
@@ -110,7 +110,7 @@ class Data {
       // If token expired
       else if (response.statusCode == 401) {
         // Log out the user
-        prPortal.setLoggedIn(false);
+        prPortal.setLoggedIn(false, null);
         return null;
       }
       // if unknown error
@@ -148,7 +148,7 @@ class Data {
       // If token expired
       else if (response.statusCode == 401) {
         // Log out the user
-        prPortal.setLoggedIn(false);
+        prPortal.setLoggedIn(false, null);
         return null;
       }
       // if unknown error
@@ -207,7 +207,7 @@ class Data {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        prPortal.setLoggedIn(false);
+        prPortal.setLoggedIn(false, null);
         return false;
       } else {
         print("Update competition time failed: ${response.statusCode}");
