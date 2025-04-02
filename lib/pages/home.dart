@@ -286,7 +286,7 @@ class _HomeState extends State<Home> {
 
     return Consumer<PRPortal>(
       builder: (context, prPortal, widget1) {
-        double paddingRatio = isHorizontal(context) ? 0.6 : 0.1;
+        double paddingRatio = isHorizontal(context) ? 0.4 : 0.1;
 
         return SafeArea(
           child: Scaffold(
@@ -304,74 +304,82 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(90),
-                              child: CircleAvatar(
-                                foregroundColor: Colors.white,
-                                child: Transform.translate(
-                                  offset: Offset(0, 5),
-                                  child: Transform.scale(
-                                    scale: 1.8,
-                                    child: Icon(Icons.person),
+                        Transform.scale(
+                          alignment: Alignment.centerLeft,
+                          scale: isHorizontal(context) ? 1.25 : 1,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(90),
+                                child: CircleAvatar(
+                                  foregroundColor: Colors.white,
+                                  child: Transform.translate(
+                                    offset: Offset(0, 5),
+                                    child: Transform.scale(
+                                      scale: 1.8,
+                                      child: Icon(Icons.person),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 15),
-                            Text(
-                              "${prPortal.username!}",
-                              style: TextStyle(
-                                color: CustomColors().lightRed,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                              SizedBox(width: 15),
+                              Text(
+                                "${prPortal.username!}",
+                                style: TextStyle(
+                                  color: CustomColors().lightRed,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        CircleAvatar(
-                          backgroundColor: CustomColors().darkRed,
-                          child: IconButton(
-                            color: Colors.white,
-                            iconSize: 20,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) => AlertDialog(
-                                      title: Text(
-                                        "Are you sure you want to logout?",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            foregroundColor: Colors.white,
-                                            backgroundColor:
-                                                CustomColors().lightRed,
+                        Transform.scale(
+                          alignment: Alignment.centerRight,
+                          scale: isHorizontal(context) ? 1.25 : 1,
+                          child: CircleAvatar(
+                            backgroundColor: CustomColors().darkRed,
+                            child: IconButton(
+                              color: Colors.white,
+                              iconSize: 20,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: Text(
+                                          "Are you sure you want to logout?",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
                                           ),
-                                          onPressed: () {
-                                            prPortal.setLoggedIn(false, null);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text("Yes"),
                                         ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text("No"),
-                                        ),
-                                      ],
-                                    ),
-                              );
-                            },
-                            icon: Icon(Icons.logout),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.white,
+                                              backgroundColor:
+                                                  CustomColors().lightRed,
+                                            ),
+                                            onPressed: () {
+                                              prPortal.setLoggedIn(false, null);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Yes"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("No"),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              },
+                              icon: Icon(Icons.logout),
+                            ),
                           ),
                         ),
                       ],

@@ -55,7 +55,9 @@ class _LoginPageState extends State<LoginPage> {
                   // SizedBox(height: height * 0.08),
                   // HeadingWidget(),
                   // SizedBox(height: height * 0.08),
-                  SizedBox(height: height * 0.35),
+                  SizedBox(
+                    height: height * (isHorizontal(context) ? 0.25 : 0.35),
+                  ),
 
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
@@ -72,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintStyle: TextStyle(
                           color: Color.fromARGB(255, 182, 177, 177),
                         ),
-                        fillColor: Color.fromARGB(255, 100, 58, 58),
+                        fillColor: Color.fromARGB(255, 63, 63, 63),
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
