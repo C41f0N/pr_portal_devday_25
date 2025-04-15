@@ -36,11 +36,12 @@ class _TeamTileState extends State<TeamTile> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 28),
         decoration: BoxDecoration(
+          border: Border.all(color: const Color.fromARGB(255, 92, 6, 0), strokeAlign: 1.5),
           borderRadius: BorderRadius.circular(22),
           color:
               widget.team.attendance
                   ? CustomColors().lightRed
-                  : CustomColors().darkRed,
+                  : Color.fromARGB(255, 39, 5, 5).withAlpha(250)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,3 +1,239 @@
+// /*
+//   LOGIN PAGE
+//   ---
+
+//   Login page for the PR ppl.
+// */
+
+// import 'package:flutter/material.dart';
+// import 'package:pr_portal_devday_25/constants/colors.dart';
+// import 'package:pr_portal_devday_25/data/authentication.dart';
+// import 'package:pr_portal_devday_25/models/pr_portal.dart';
+// import 'package:pr_portal_devday_25/utils/utilities.dart';
+// import 'package:pr_portal_devday_25/widgets/heading.dart';
+// import 'package:provider/provider.dart';
+
+// class LoginPage extends StatefulWidget {
+//   const LoginPage({super.key});
+
+//   @override
+//   State<LoginPage> createState() => _LoginPageState();
+// }
+
+// class _LoginPageState extends State<LoginPage> {
+//   final TextEditingController usernameController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+
+//   @override
+//   void dispose() {
+//     usernameController.dispose();
+//     passwordController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final width = MediaQuery.of(context).size.width;
+//     final height = MediaQuery.of(context).size.height;
+
+//     return Consumer<PRPortal>(
+//       builder: (context, prPortal, widget1) {
+//         return Scaffold(
+//           body: Container(
+            //  decoration: BoxDecoration(
+            //   gradient: RadialGradient(
+            //     center: Alignment.center,
+            //     radius: 1.0,
+            //     colors: [
+            //       Color(0xff3e0c0b), // Maroon in the middle
+            //       Colors.black, // Black on the outside
+            //     ],
+            //     stops: [0.3, 1.0],
+            //   ),
+//             ),
+//             child: Center(
+//               child: SingleChildScrollView(
+//                 padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     SizedBox(
+//                       width:
+//                           isHorizontal(context)
+//                               ? 500
+//                               : MediaQuery.of(context).size.width * 0.66,
+//                       child: Image.asset("assets/logo.png"),
+//                     ),
+//                     // SizedBox(height: height * 0.08),
+//                     // HeadingWidget(),
+//                     // SizedBox(height: height * 0.08),
+//                     SizedBox(
+//                       height: height * (isHorizontal(context) ? 0.25 : 0.35),
+//                     ),
+
+//                     Container(
+//                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+//                       width: isHorizontal(context) ? 500 : width * 0.75,
+//                       child: TextField(
+//                         style: TextStyle(
+//                           color: Color.fromARGB(255, 182, 177, 177),
+//                         ),
+//                         controller: usernameController,
+//                         autocorrect: false,
+//                         textAlign: TextAlign.center,
+//                         decoration: InputDecoration(
+//                           hintText: 'Username',
+//                           hintStyle: TextStyle(
+//                             color: Color.fromARGB(255, 182, 177, 177),
+//                           ),
+//                           fillColor: Color.fromARGB(255, 63, 63, 63),
+//                           filled: true,
+//                           enabledBorder: OutlineInputBorder(
+//                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
+//                             borderSide: BorderSide.none
+//                             // borderSide: BorderSide(
+
+//                             //   //   color: Color.fromARGB(
+//                             //   //     255,
+//                             //   //     36,
+//                             //   //     36,
+//                             //   //     36,
+//                             //   //   ), // Border color
+//                             //   width: 1.0, // Border width
+//                             // ),
+//                           ),
+//                           focusedBorder: OutlineInputBorder(
+//                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
+//                             borderSide: BorderSide(color: Colors.red, width: 1.0),
+//                           ),
+//                         ),
+//                       ),
+//                     ), //Username Text Field
+//                     Container(
+//                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+//                       width: isHorizontal(context) ? 500 : width * 0.75,
+//                       child: TextField(
+//                         style: TextStyle(
+//                           color: Color.fromARGB(255, 182, 177, 177),
+//                         ),
+//                         controller: passwordController,
+//                         obscureText: true,
+//                         autocorrect: false,
+//                         textAlign: TextAlign.center,
+//                         decoration: InputDecoration(
+//                           hintText: 'Password',
+//                           hintStyle: TextStyle(
+//                             color: Color.fromARGB(255, 182, 177, 177),
+//                           ),
+//                           fillColor: Color.fromARGB(255, 63, 63, 63),
+//                           filled: true,
+//                           enabledBorder: OutlineInputBorder(
+//                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
+//                             borderSide: BorderSide.none
+//                             // borderSide: BorderSide(
+//                             //   // color: Color.fromARGB(255, 63, 63, 63),
+//                             //   width: 1.0,
+//                             // ),
+//                           ),
+//                           focusedBorder: OutlineInputBorder(
+//                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
+//                             borderSide: BorderSide(color: Colors.red, width: 1.0),
+//                           ),
+//                         ),
+//                       ),
+//                     ), //Password Text Field
+//                     SizedBox(
+//                       width: isHorizontal(context) ? 500 : width * 0.75,
+//                       height: 55,
+//                       child: TextButton(
+//                         onPressed: () async {
+//                           // Login logic
+//                           if (usernameController.text.isNotEmpty &&
+//                               passwordController.text.isNotEmpty) {
+//                             // Show loading dialogue
+//                             showDialog(
+//                               barrierDismissible: true,
+//                               context: context,
+//                               builder:
+//                                   (_) =>
+//                                       Center(child: CircularProgressIndicator()),
+//                             );
+
+//                             String result = await authenticate(
+//                               usernameController.text,
+//                               passwordController.text,
+//                             );
+
+//                             if (result == "UNAUTHORIZED") {
+//                               Navigator.pop(context);
+//                               showDialog(
+//                                 context: context,
+//                                 builder:
+//                                     (context) => AlertDialog(
+//                                       title: Text(
+//                                         "Username or password incorrect.",
+//                                       ),
+//                                       actions: [
+//                                         ElevatedButton(
+//                                           style: ElevatedButton.styleFrom(
+//                                             foregroundColor: Colors.white,
+//                                             backgroundColor:
+//                                                 CustomColors().lightRed,
+//                                           ),
+//                                           onPressed:
+//                                               () => Navigator.of(context).pop(),
+//                                           child: Text("Okay"),
+//                                         ),
+//                                       ],
+//                                     ),
+//                               );
+//                             } else if (result == "FAILED") {
+//                               Navigator.pop(context);
+//                               showDialog(
+//                                 context: context,
+//                                 builder:
+//                                     (context) => AlertDialog(
+//                                       title: Text("An unknown error occoured"),
+//                                       actions: [
+//                                         ElevatedButton(
+//                                           style: ElevatedButton.styleFrom(
+//                                             foregroundColor: Colors.white,
+//                                             backgroundColor:
+//                                                 CustomColors().lightRed,
+//                                           ),
+//                                           onPressed:
+//                                               () => Navigator.of(context).pop(),
+//                                           child: Text("Okay"),
+//                                         ),
+//                                       ],
+//                                     ),
+//                               );
+//                             } else {
+//                               Navigator.pop(context);
+//                               prPortal.setToken(result);
+//                               prPortal.setLoggedIn(true, usernameController.text);
+//                             }
+//                           }
+//                         },
+//                         style: TextButton.styleFrom(
+//                           backgroundColor: CustomColors().lightRed,
+//                           foregroundColor: Colors.white,
+//                         ),
+//                         child: const Text('Go', style: TextStyle(fontSize: 16)),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//           backgroundColor: const Color.fromARGB(255, 14, 14, 14),
+//         );
+//       },
+//     );
+//   }
+// }
+
 /*
   LOGIN PAGE
   ---
@@ -6,11 +242,13 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/data/authentication.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/utils/utilities.dart';
 import 'package:pr_portal_devday_25/widgets/heading.dart';
+import 'package:pr_portal_devday_25/widgets/paint.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,181 +274,234 @@ class _LoginPageState extends State<LoginPage> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
+    print(width);
+    print(height);
+
     return Consumer<PRPortal>(
       builder: (context, prPortal, widget1) {
         return Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width:
-                        isHorizontal(context)
-                            ? 500
-                            : MediaQuery.of(context).size.width * 0.66,
-                    child: Image.asset("assets/logo.png"),
+          body: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.center,
+                    radius: 1.0,
+                    colors: [
+                      Color(0xff3e0c0b), // Maroon in the middle
+                      Colors.black, // Black on the outside
+                    ],
+                    stops: [0.3, 2],
                   ),
-                  // SizedBox(height: height * 0.08),
-                  // HeadingWidget(),
-                  // SizedBox(height: height * 0.08),
-                  SizedBox(
-                    height: height * (isHorizontal(context) ? 0.25 : 0.35),
-                  ),
-
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    width: isHorizontal(context) ? 500 : width * 0.75,
-                    child: TextField(
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 182, 177, 177),
-                      ),
-                      controller: usernameController,
-                      autocorrect: false,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 182, 177, 177),
-                        ),
-                        fillColor: Color.fromARGB(255, 63, 63, 63),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                          borderSide: BorderSide(
-                            //   color: Color.fromARGB(
-                            //     255,
-                            //     36,
-                            //     36,
-                            //     36,
-                            //   ), // Border color
-                            width: 1.0, // Border width
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                          borderSide: BorderSide(color: Colors.red, width: 1.0),
-                        ),
-                      ),
-                    ),
-                  ), //Username Text Field
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    width: isHorizontal(context) ? 500 : width * 0.75,
-                    child: TextField(
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 182, 177, 177),
-                      ),
-                      controller: passwordController,
-                      obscureText: true,
-                      autocorrect: false,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 182, 177, 177),
-                        ),
-                        fillColor: Color.fromARGB(255, 63, 63, 63),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                          borderSide: BorderSide(
-                            // color: Color.fromARGB(255, 63, 63, 63),
-                            width: 1.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                          borderSide: BorderSide(color: Colors.red, width: 1.0),
-                        ),
-                      ),
-                    ),
-                  ), //Password Text Field
-                  SizedBox(
-                    width: isHorizontal(context) ? 500 : width * 0.75,
-                    height: 55,
-                    child: TextButton(
-                      onPressed: () async {
-                        // Login logic
-                        if (usernameController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty) {
-                          // Show loading dialogue
-                          showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder:
-                                (_) =>
-                                    Center(child: CircularProgressIndicator()),
-                          );
-
-                          String result = await authenticate(
-                            usernameController.text,
-                            passwordController.text,
-                          );
-
-                          if (result == "UNAUTHORIZED") {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    title: Text(
-                                      "Username or password incorrect.",
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor:
-                                              CustomColors().lightRed,
-                                        ),
-                                        onPressed:
-                                            () => Navigator.of(context).pop(),
-                                        child: Text("Okay"),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                          } else if (result == "FAILED") {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    title: Text("An unknown error occoured"),
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor:
-                                              CustomColors().lightRed,
-                                        ),
-                                        onPressed:
-                                            () => Navigator.of(context).pop(),
-                                        child: Text("Okay"),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                          } else {
-                            Navigator.pop(context);
-                            prPortal.setToken(result);
-                            prPortal.setLoggedIn(true, usernameController.text);
-                          }
-                        }
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: CustomColors().lightRed,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Go', style: TextStyle(fontSize: 16)),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              // CustomPaint(
+              //   painter: AngledBackgroundPainter(),
+              //   size: Size.infinite,
+              // ),
+              Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width:
+                            isHorizontal(context)
+                                ? 500
+                                : MediaQuery.of(context).size.width * 0.8,
+                        child: Image.asset("assets/logo.png"),
+                      ),
+                      // SizedBox(height: height * 0.08),
+                      // HeadingWidget(),
+                      // SizedBox(height: height * 0.08),
+                      SizedBox(
+                        height: height * (isHorizontal(context) ? 0.25 : 0.22),
+                      ),
+
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        width: isHorizontal(context) ? 500 : width * 0.8,
+                        child: TextField(
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 182, 177, 177),
+                          ),
+                          controller: usernameController,
+                          autocorrect: false,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Username',
+                            hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 182, 177, 177),
+                            ),
+                            fillColor: Color.fromARGB(255, 63, 63, 63),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.0),
+                              ),
+                              borderSide: BorderSide.none,
+                              // borderSide: BorderSide(
+
+                              //   //   color: Color.fromARGB(
+                              //   //     255,
+                              //   //     36,
+                              //   //     36,
+                              //   //     36,
+                              //   //   ), // Border color
+                              //   width: 1.0, // Border width
+                              // ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.0),
+                              ),
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ), //Username Text Field
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, height * 0.06),
+                        width: isHorizontal(context) ? 500 : width * 0.8,
+                        child: TextField(
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 182, 177, 177),
+                          ),
+                          controller: passwordController,
+                          obscureText: true,
+                          autocorrect: false,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 182, 177, 177),
+                            ),
+                            fillColor: Color.fromARGB(255, 63, 63, 63),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.0),
+                              ),
+                              borderSide: BorderSide.none,
+                              // borderSide: BorderSide(
+                              //   // color: Color.fromARGB(255, 63, 63, 63),
+                              //   width: 1.0,
+                              // ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.0),
+                              ),
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ), //Password Text Field
+                      SizedBox(
+                        width: isHorizontal(context) ? 500 : width * 0.8,
+                        height: 55,
+                        child: TextButton(
+                          onPressed: () async {
+                            // Login logic
+                            if (usernameController.text.isNotEmpty &&
+                                passwordController.text.isNotEmpty) {
+                              // Show loading dialogue
+                              showDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder:
+                                    (_) => Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                              );
+
+                              String result = await authenticate(
+                                usernameController.text,
+                                passwordController.text,
+                              );
+
+                              if (result == "UNAUTHORIZED") {
+                                Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: Text(
+                                          "Username or password incorrect.",
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.white,
+                                              backgroundColor:
+                                                  CustomColors().lightRed,
+                                            ),
+                                            onPressed:
+                                                () =>
+                                                    Navigator.of(context).pop(),
+                                            child: Text("Okay"),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              } else if (result == "FAILED") {
+                                Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: Text(
+                                          "An unknown error occoured",
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.white,
+                                              backgroundColor:
+                                                  CustomColors().lightRed,
+                                            ),
+                                            onPressed:
+                                                () =>
+                                                    Navigator.of(context).pop(),
+                                            child: Text("Okay"),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              } else {
+                                Navigator.pop(context);
+                                prPortal.setToken(result);
+                                prPortal.setLoggedIn(
+                                  true,
+                                  usernameController.text,
+                                );
+                              }
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: CustomColors().lightRed,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text(
+                            'Go',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
+
           backgroundColor: const Color.fromARGB(255, 14, 14, 14),
         );
       },

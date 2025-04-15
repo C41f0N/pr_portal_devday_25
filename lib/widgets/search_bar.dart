@@ -50,12 +50,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       controller: widget.controller,
       style: TextStyle(color: CustomColors().searchBarText),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           gapPadding: 900,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           gapPadding: 900,
         ),
         hintText: 'Search',
