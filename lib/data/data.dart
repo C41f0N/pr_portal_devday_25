@@ -175,8 +175,8 @@ class Data {
       PRPortal prPortal = context.read<PRPortal>();
 
       // Subtracting 5 hours offset
-      startTime = startTime.subtract(Duration(hours: 5));
-      endTime = endTime.subtract(Duration(hours: 5));
+      startTime = startTime.toUtc();
+      endTime = startTime.toUtc();
 
       final startTimeUtc = DateTime.utc(
         startTime.year,

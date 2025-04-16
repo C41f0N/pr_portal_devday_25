@@ -38,12 +38,15 @@ class CompetitionTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 14),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromARGB(255, 92, 6, 0), strokeAlign: 1.5),
+          border: Border.all(
+            color: const Color.fromARGB(255, 92, 6, 0),
+            strokeAlign: 1.5,
+          ),
           borderRadius: BorderRadius.circular(22),
           color:
               isGoingOn
                   ? CustomColors().lightRed
-                  : Color.fromARGB(255, 39, 5, 5).withAlpha(250)
+                  : Color.fromARGB(255, 39, 5, 5).withAlpha(250),
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -59,7 +62,10 @@ class CompetitionTile extends StatelessWidget {
                     child: AutoSizeText(
                       competition.name,
                       maxLines: 2,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                   Container(
@@ -118,6 +124,11 @@ class CompetitionTile extends StatelessWidget {
   void _showTimeUpdateDialog(BuildContext context) {
     DateTime newStartTime = competition.startTime;
     DateTime newEndTime = competition.endTime;
+
+    print(competition.startTime);
+    print(DateTime.now());
+
+    print(competition.startTime.isBefore(DateTime.now()));
 
     showDialog(
       context: context,
