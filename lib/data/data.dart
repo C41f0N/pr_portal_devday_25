@@ -176,7 +176,7 @@ class Data {
 
       // Subtracting 5 hours offset
       startTime = startTime.toUtc();
-      endTime = startTime.toUtc();
+      endTime = endTime.toUtc();
 
       final startTimeUtc = DateTime.utc(
         startTime.year,

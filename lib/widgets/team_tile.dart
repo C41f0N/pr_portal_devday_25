@@ -7,10 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
-import 'package:pr_portal_devday_25/data/data.dart';
-import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/models/team.dart';
-import 'package:provider/provider.dart';
 
 class TeamTile extends StatefulWidget {
   const TeamTile({

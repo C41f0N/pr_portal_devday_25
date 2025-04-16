@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
-import 'package:pr_portal_devday_25/pages/home.dart';
 import 'package:pr_portal_devday_25/pages/login_handler.dart';
 import 'package:pr_portal_devday_25/widgets/heading.dart';
 

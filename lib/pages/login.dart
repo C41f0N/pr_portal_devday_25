@@ -40,16 +40,16 @@
 //       builder: (context, prPortal, widget1) {
 //         return Scaffold(
 //           body: Container(
-            //  decoration: BoxDecoration(
-            //   gradient: RadialGradient(
-            //     center: Alignment.center,
-            //     radius: 1.0,
-            //     colors: [
-            //       Color(0xff3e0c0b), // Maroon in the middle
-            //       Colors.black, // Black on the outside
-            //     ],
-            //     stops: [0.3, 1.0],
-            //   ),
+//  decoration: BoxDecoration(
+//   gradient: RadialGradient(
+//     center: Alignment.center,
+//     radius: 1.0,
+//     colors: [
+//       Color(0xff3e0c0b), // Maroon in the middle
+//       Colors.black, // Black on the outside
+//     ],
+//     stops: [0.3, 1.0],
+//   ),
 //             ),
 //             child: Center(
 //               child: SingleChildScrollView(
@@ -242,13 +242,10 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/data/authentication.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/utils/utilities.dart';
-import 'package:pr_portal_devday_25/widgets/heading.dart';
-import 'package:pr_portal_devday_25/widgets/paint.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {

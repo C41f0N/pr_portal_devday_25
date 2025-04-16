@@ -219,8 +219,7 @@ class CompetitionTile extends StatelessWidget {
                       onPrimary: Colors.white,
                       surface: CustomColors().darkRed,
                       onSurface: Colors.white,
-                    ),
-                    dialogBackgroundColor: CustomColors().darkRed,
+                    ), dialogTheme: DialogThemeData(backgroundColor: CustomColors().darkRed),
                   ),
                   child: child!,
                 );

@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
 import 'package:pr_portal_devday_25/models/pr_portal.dart';
 import 'package:pr_portal_devday_25/pages/login_handler.dart';
-import 'package:pr_portal_devday_25/pages/splash.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
