@@ -14,7 +14,11 @@ class Competition {
 
   Competition.fromJson(Map<String, dynamic> json) {
     this.name = json["competitionName"];
-    this.startTime = DateTime.parse(json["start_time"]);
-    this.endTime = DateTime.parse(json["end_time"]);
+    this.startTime = DateTime.parse(
+      json["start_time"],
+    ).add(Duration(hours: 5)); // adding 5 hours for utc offset
+    this.endTime = DateTime.parse(
+      json["end_time"],
+    ).add(Duration(hours: 5)); // adding 5 hours for utc offset
   }
 }

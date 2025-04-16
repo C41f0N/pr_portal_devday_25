@@ -174,6 +174,10 @@ class Data {
     try {
       PRPortal prPortal = context.read<PRPortal>();
 
+      // Subtracting 5 hours offset
+      startTime = startTime.subtract(Duration(hours: 5));
+      endTime = endTime.subtract(Duration(hours: 5));
+
       final startTimeUtc = DateTime.utc(
         startTime.year,
         startTime.month,
