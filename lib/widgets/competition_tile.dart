@@ -136,7 +136,9 @@ class CompetitionTile extends StatelessWidget {
           (context) => StatefulBuilder(
             builder:
                 (context, setState) => AlertDialog(
-                  backgroundColor: CustomColors().darkRed.withOpacity(0.95),
+                  backgroundColor: CustomColors().darkRed.withValues(
+                    alpha: 0.95,
+                  ),
                   title: Text(
                     competition.name,
                     style: TextStyle(color: Colors.white),
@@ -219,7 +221,10 @@ class CompetitionTile extends StatelessWidget {
                       onPrimary: Colors.white,
                       surface: CustomColors().darkRed,
                       onSurface: Colors.white,
-                    ), dialogTheme: DialogThemeData(backgroundColor: CustomColors().darkRed),
+                    ),
+                    dialogTheme: DialogThemeData(
+                      backgroundColor: CustomColors().darkRed,
+                    ),
                   ),
                   child: child!,
                 );

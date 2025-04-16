@@ -1260,12 +1260,18 @@ class _HomeState extends State<Home> {
             actions: [
               ElevatedButton(
                 onPressed: () async {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (_) => Center(child: CircularProgressIndicator()),
+                  );
                   String? result =
                       team.attendance
                           ? await Data().unmarkAttendance(context, team)
                           : await Data().markAttendance(context, team);
 
                   if (result == "FAILED") {
+                    Navigator.pop(context);
                     Navigator.pop(context);
                     showDialog(
                       context: context,
@@ -1283,6 +1289,7 @@ class _HomeState extends State<Home> {
                           ),
                     );
                   } else {
+                    Navigator.pop(context);
                     // Update the team in our local lists
                     int teamIndex = teamsList.indexWhere(
                       (t) => t.name == team.name,
