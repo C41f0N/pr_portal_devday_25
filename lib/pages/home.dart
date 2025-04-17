@@ -874,6 +874,7 @@ import 'package:pr_portal_devday_25/widgets/search_bar.dart';
 import 'package:pr_portal_devday_25/widgets/team_description_dialogue.dart';
 import 'package:pr_portal_devday_25/widgets/team_tile.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../data/data.dart';
 
@@ -892,7 +893,7 @@ class _HomeState extends State<Home> {
   List<Competition> competitionsList = [];
   List<Team> filteredTeams = [];
   List<Competition> filteredCompetitions = [];
-  String? selectedCompetition;
+  String? selectedCompetition = "";
 
   // UI state
   bool isLoading = true;
@@ -1044,7 +1045,13 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildProfileSection(prPortal),
-                          _buildLogoutButton(prPortal),
+                          Row(
+                            children: [
+                              _buildInfoButton(),
+                              SizedBox(width: 10),
+                              _buildLogoutButton(prPortal),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -1079,20 +1086,24 @@ class _HomeState extends State<Home> {
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                underline: null,
-                                borderRadius: BorderRadius.circular(10),
-                                iconEnabledColor: CustomColors().lightRed,
-                                isExpanded: true,
-                                items: dropdownCompetitions,
-                                value: selectedCompetition,
-                                onChanged: (x) {
-                                  selectedCompetition = x;
-                                  _filterData();
-                                },
-                              ),
-                            ),
+                            child:
+                                viewMode == ViewMode.teams
+                                    ? DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        underline: null,
+                                        borderRadius: BorderRadius.circular(10),
+                                        iconEnabledColor:
+                                            CustomColors().lightRed,
+                                        isExpanded: true,
+                                        items: dropdownCompetitions,
+                                        value: selectedCompetition,
+                                        onChanged: (x) {
+                                          selectedCompetition = x;
+                                          _filterData();
+                                        },
+                                      ),
+                                    )
+                                    : SizedBox(),
                           ),
                         ],
                       ),
@@ -1232,6 +1243,23 @@ class _HomeState extends State<Home> {
         iconSize: 20,
         onPressed: () => _showLogoutConfirmDialog(prPortal),
         icon: const Icon(Icons.logout),
+      ),
+    );
+  }
+
+  Widget _buildInfoButton() {
+    return CircleAvatar(
+      backgroundColor: CustomColors().darkRed,
+      child: IconButton(
+        color: Colors.white,
+        iconSize: 20,
+        onPressed: () {
+          launchUrl(
+            Uri.parse("https://automation.devday25.com/"),
+            mode: LaunchMode.externalApplication,
+          );
+        },
+        icon: const Icon(Icons.info),
       ),
     );
   }
