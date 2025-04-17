@@ -860,6 +860,7 @@
 // }
 //-----------------------------------------------------------------------
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:pr_portal_devday_25/constants/colors.dart';
@@ -891,6 +892,7 @@ class _HomeState extends State<Home> {
   List<Competition> competitionsList = [];
   List<Team> filteredTeams = [];
   List<Competition> filteredCompetitions = [];
+  String? selectedCompetition;
 
   // UI state
   bool isLoading = true;
@@ -958,8 +960,14 @@ class _HomeState extends State<Home> {
       // Filter teams
       filteredTeams =
           teamsList.where((team) {
-            return team.name.toLowerCase().contains(searchTerm) ||
-                team.leader.toLowerCase().contains(searchTerm);
+            if (selectedCompetition == "" || selectedCompetition == null) {
+              return (team.name.toLowerCase().contains(searchTerm) ||
+                  team.leader.toLowerCase().contains(searchTerm));
+            } else {
+              return (team.name.toLowerCase().contains(searchTerm) ||
+                      team.leader.toLowerCase().contains(searchTerm)) &&
+                  team.competition == selectedCompetition;
+            }
           }).toList();
 
       // Filter competitions
@@ -987,6 +995,26 @@ class _HomeState extends State<Home> {
     return Consumer<PRPortal>(
       builder: (context, prPortal, _) {
         double paddingRatio = isHorizontal(context) ? 0.4 : 0.1;
+
+        List<DropdownMenuItem> dropdownCompetitions =
+            competitionsList.map((competition) {
+              return DropdownMenuItem(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: AutoSizeText(
+                    competition.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                value: competition.name,
+              );
+            }).toList();
+
+        dropdownCompetitions.insert(
+          0,
+          DropdownMenuItem<String>(child: Text("ALL"), value: ""),
+        );
 
         return SafeArea(
           child: Scaffold(
@@ -1048,6 +1076,23 @@ class _HomeState extends State<Home> {
                             onChanged: (s) {
                               _filterData(); // Apply search filter to local data
                             },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                underline: null,
+                                borderRadius: BorderRadius.circular(10),
+                                iconEnabledColor: CustomColors().lightRed,
+                                isExpanded: true,
+                                items: dropdownCompetitions,
+                                value: selectedCompetition,
+                                onChanged: (x) {
+                                  selectedCompetition = x;
+                                  _filterData();
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       ),

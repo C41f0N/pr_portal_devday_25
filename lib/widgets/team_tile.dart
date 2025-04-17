@@ -33,12 +33,15 @@ class _TeamTileState extends State<TeamTile> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 28),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromARGB(255, 92, 6, 0), strokeAlign: 1.5),
+          border: Border.all(
+            color: const Color.fromARGB(255, 92, 6, 0),
+            strokeAlign: 1.5,
+          ),
           borderRadius: BorderRadius.circular(22),
           color:
               widget.team.attendance
                   ? CustomColors().lightRed
-                  : Color.fromARGB(255, 39, 5, 5).withAlpha(250)
+                  : Color.fromARGB(255, 39, 5, 5).withAlpha(250),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,13 +49,19 @@ class _TeamTileState extends State<TeamTile> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.team.name, style: TextStyle(fontSize: 24)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(widget.team.name, style: TextStyle(fontSize: 24)),
+                ),
                 SizedBox(height: 5),
-                Text(
-                  widget.team.leader,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withValues(alpha: 0.9),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    widget.team.leader,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withValues(alpha: 0.9),
+                    ),
                   ),
                 ),
               ],
